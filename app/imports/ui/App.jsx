@@ -10,6 +10,16 @@ const tasks = [
   {_id: 3, text: 'Third Task'},
 ]
 
+const toggleChecked = ({ _id, isChecked }) => {
+  TasksCollection.update(_id, {
+    $set: {
+      isChecked: !isChecked
+    }
+  })
+};
+
+const deleteTask = ({ _id }) => TasksCollection.remove(_id);
+
 export const App = () => {
   const tasks = useTracker(() => TasksCollection.find({}, { sort: { createdAt: -1 } }).fetch());
 
@@ -20,7 +30,12 @@ export const App = () => {
       <TaskForm/>
 
       <ul>
-        { tasks.map(task => <Task key={ task._id } task={ task }/>) }
+        { tasks.map(task => <Task
+          key={ task._id }
+          task={ task }
+          onCheckboxClick={toggleChecked}
+          onDeleteClick={deleteTask}
+        />) }
       </ul>
     </div>
   );
