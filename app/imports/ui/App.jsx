@@ -1,4 +1,6 @@
 import React from 'react';
+import { useTracker } from 'meteor/react-meteor-data';
+import { TasksCollection } from '../api/TasksCollection';
 import { Task } from './Task.jsx';
 
 const tasks = [
@@ -7,12 +9,16 @@ const tasks = [
   {_id: 3, text: 'Third Task'},
 ]
 
-export const App = () => (
-  <div>
-    <h1>Welcome to Meteor!</h1>
+export const App = () => {
+  const tasks = useTracker(() => TasksCollection.find({}).fetch());
 
-    <ul>
-      { tasks.map(task => <Task key={ task._id } task={ task }/>) }
-    </ul>
-  </div>
-);
+  return (
+    <div>
+      <h1>Welcome to Meteor!</h1>
+
+      <ul>
+        { tasks.map(task => <Task key={ task._id } task={ task }/>) }
+      </ul>
+    </div>
+  );
+};
